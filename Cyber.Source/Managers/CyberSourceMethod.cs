@@ -13,7 +13,7 @@ namespace Cyber.Source.Managers
     public class CyberSourceMethod : PaymentMethod
     {
         private const string _cyberSourceMerchantIdStoreSetting = "CyberSource.MerchantId";
-        private const string _cyberSourceMerchantReferenceCodeStoreSetting = "CyberSource.MerchantReferenceCode";
+        private const string _cyberSourceKeysDirectoryStoreSetting = "CyberSource.KeysDirectory";
         private const string _cyberSourcePaymentMethodStoreSetting = "CyberSource.PaymentMethod";
         private const string _cyberSourceWorkModeStoreSetting = "CyberSource.WorkMode";
         private const string _cyberSourceThankYouPageRelativeUrl = "CyberSource.ThankYouPageRelativeUrl";
@@ -31,7 +31,7 @@ namespace Cyber.Source.Managers
         {
             get
             {
-                return PaymentMethodType.Redirection;
+                return PaymentMethodType.Standard;
             }
         }
 
@@ -40,14 +40,6 @@ namespace Cyber.Source.Managers
             get
             {
                 return GetSetting(_cyberSourceMerchantIdStoreSetting);
-            }
-        }
-
-        public string MerchantReferenceCode
-        {
-            get
-            {
-                return GetSetting(_cyberSourceMerchantReferenceCodeStoreSetting);
             }
         }
 
@@ -81,7 +73,7 @@ namespace Cyber.Source.Managers
 
             var request = PrepareCaptureProcessPaymentRequest(context);
 
-            var reply = NVPClient.RunTransaction(request);
+            var reply = NVPClient.RunTransaction(TransactionConfiguration, request);
             if (reply != null && reply.ContainsKey("decision") && reply.ContainsKey("reasonCode"))
             {
                 var decision = (string)reply["decision"];
@@ -99,18 +91,18 @@ namespace Cyber.Source.Managers
                 else
                 {
                     if (reasonCode == 101)
-                        throw new NullReferenceException(string.Format("result from cyber source, not success, decision is {0}, reasonCode is {1}, full info of reason is {2}", decision, reasonCode, EnumerateValues(reply, "missingField")));
+                        throw new NullReferenceException(string.Format("result from CyberSource, not success, decision is {0}, reasonCode is {1}, full info of reason is {2}", decision, reasonCode, EnumerateValues(reply, "missingField")));
                     if (reasonCode == 102)
-                        throw new NullReferenceException(string.Format("result from cyber source, not success, decision is {0}, reasonCode is {1}, full info of reason is {2}", decision, reasonCode, EnumerateValues(reply, "invalidField")));
+                        throw new NullReferenceException(string.Format("result from CyberSource, not success, decision is {0}, reasonCode is {1}, full info of reason is {2}", decision, reasonCode, EnumerateValues(reply, "invalidField")));
                     if (reasonCode == 204)
-                        throw new NullReferenceException(string.Format("result from cyber source, not success, decision is {0}, reasonCode is {1}, full info of reason is not enough funds", decision, reasonCode));
+                        throw new NullReferenceException(string.Format("result from CyberSource, not success, decision is {0}, reasonCode is {1}, full info of reason is not enough funds", decision, reasonCode));
 
-                    throw new NullReferenceException(string.Format("result from cyber source, not success, decision is {0}, reasonCode is {1}", decision, reasonCode));
+                    throw new NullReferenceException(string.Format("result from CyberSource, not success, decision is {0}, reasonCode is {1}", decision, reasonCode));
                 }
             }
             else
             {
-                throw new NullReferenceException("no reply from cyber source");
+                throw new NullReferenceException("no reply from CyberSource");
             }
 
             return retVal;
@@ -127,7 +119,7 @@ namespace Cyber.Source.Managers
 
             var request = PrepareProcessPaymentRequest(context);
 
-            var reply = NVPClient.RunTransaction(request);
+            var reply = NVPClient.RunTransaction(TransactionConfiguration, request);
             if (reply != null && reply.ContainsKey("decision") && reply.ContainsKey("reasonCode"))
             {
                 var decision = (string)reply["decision"];
@@ -154,18 +146,18 @@ namespace Cyber.Source.Managers
                 else
                 {
                     if (reasonCode == 101)
-                        throw new NullReferenceException(string.Format("result from cyber source, not success, decision is {0}, reasonCode is {1}, full info of reason is {2}", decision, reasonCode, EnumerateValues(reply, "missingField")));
+                        throw new NullReferenceException(string.Format("result from CyberSource, not success, decision is {0}, reasonCode is {1}, full info of reason is {2}", decision, reasonCode, EnumerateValues(reply, "missingField")));
                     if (reasonCode == 102)
-                        throw new NullReferenceException(string.Format("result from cyber source, not success, decision is {0}, reasonCode is {1}, full info of reason is {2}", decision, reasonCode, EnumerateValues(reply, "invalidField")));
+                        throw new NullReferenceException(string.Format("result from CyberSource, not success, decision is {0}, reasonCode is {1}, full info of reason is {2}", decision, reasonCode, EnumerateValues(reply, "invalidField")));
                     if (reasonCode == 204)
-                        throw new NullReferenceException(string.Format("result from cyber source, not success, decision is {0}, reasonCode is {1}, full info of reason is not enough funds", decision, reasonCode));
+                        throw new NullReferenceException(string.Format("result from CyberSource, not success, decision is {0}, reasonCode is {1}, full info of reason is not enough funds", decision, reasonCode));
 
-                    throw new NullReferenceException(string.Format("result from cyber source, not success, decision is {0}, reasonCode is {1}", decision, reasonCode));
+                    throw new NullReferenceException(string.Format("result from CyberSource, not success, decision is {0}, reasonCode is {1}", decision, reasonCode));
                 }
             }
             else
             {
-                throw new NullReferenceException("no reply from cyber source");
+                throw new NullReferenceException("no reply from CyberSource");
             }
 
             return retVal;
@@ -195,7 +187,7 @@ namespace Cyber.Source.Managers
             request.Add("item_0_unitPrice", context.Payment.Sum.ToString());
             //request.Add("item_0_quantity", "1");
 
-            var reply = NVPClient.RunTransaction(request);
+            var reply = NVPClient.RunTransaction(TransactionConfiguration, request);
             if (reply != null && reply.ContainsKey("decision") && reply.ContainsKey("reasonCode"))
             {
                 var decision = (string)reply["decision"];
@@ -210,15 +202,38 @@ namespace Cyber.Source.Managers
                 }
                 else
                 {
-                    throw new NullReferenceException(string.Format("result from cyber source, not success, decision is {0}, reasonCode is {1}", decision, reasonCode));
+                    throw new NullReferenceException(string.Format("result from CyberSource, not success, decision is {0}, reasonCode is {1}", decision, reasonCode));
                 }
             }
             else
             {
-                throw new NullReferenceException("no reply from cyber source");
+                throw new NullReferenceException("no reply from CyberSource");
             }
 
             return retVal;
+        }
+
+        public Configuration TransactionConfiguration
+        {
+            get
+            {
+                try
+                {
+                    return new Configuration()
+                    {
+                        MerchantID = MerchantId,
+                        KeysDirectory = GetSetting(_cyberSourceKeysDirectoryStoreSetting),
+                        SendToProduction = !IsTest()
+                    };
+                }
+                catch (ApplicationException ae)
+                {
+                    return new Configuration()
+                    {
+                        MerchantID = ae.Message
+                    };
+                }
+            }
         }
 
         private Hashtable PrepareProcessPaymentRequest(ProcessPaymentEvaluationContext context)
@@ -240,10 +255,10 @@ namespace Cyber.Source.Managers
                 request.Add("ccCaptureService_run", "true");
             }
 
-            if (IsTest())
-                request.Add("sendToProduction", "false");
-            else
-                request.Add("sendToProduction", "true");
+            //if (IsTest())
+            //    request.Add("sendToProduction", "false");
+            //else
+            //    request.Add("sendToProduction", "true");
 
             // Set billing address of payment as address for request
             var address = context.Payment.BillingAddress;
@@ -279,10 +294,10 @@ namespace Cyber.Source.Managers
         {
             Hashtable request = new Hashtable();
 
-            if (IsTest())
-                request.Add("sendToProduction", "false");
-            else
-                request.Add("sendToProduction", "true");
+            //if (IsTest())
+            //    request.Add("sendToProduction", "false");
+            //else
+            //    request.Add("sendToProduction", "true");
 
             request.Add("ccCaptureService_authRequestID", context.Payment.OuterId);
             request.Add("merchantID", MerchantId);

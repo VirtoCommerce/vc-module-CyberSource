@@ -16,10 +16,10 @@
         <owner>Virto Commerce</owner>
     </owners>
     <projectUrl>http://virtocommerce.com/</projectUrl>
-    <iconUrl>Modules/$(Cyber.Source)/Content/cybersource.jpg</iconUrl>
+    <iconUrl>https://raw.githubusercontent.com/VirtoCommerce/vc-module-CyberSource/master/Cyber.Source/Content/cybersource.jpg</iconUrl>
     <releaseNotes>First version.</releaseNotes>
-    <copyright>Copyright © 2011-2015 Virto Commerce. All rights reserved</copyright>
-    <tags>cyber source payment gateway</tags>
+    <copyright>Copyright © 2011-2016 Virto Commerce. All rights reserved</copyright>
+    <tags>Cyber source payment gateway</tags>
 
     <assemblyFile>Cyber.Source.dll</assemblyFile>
     <moduleType>Cyber.Source.Module, Cyber.Source</moduleType>
@@ -29,20 +29,21 @@
             <setting>
                 <name>CyberSource.MerchantId</name>
                 <valueType>string</valueType>
-                <title>Merchant id</title>
-                <description>CyberSource merchant id</description>
+                <title>Merchant ID</title>
+                <description>CyberSource Merchant ID</description>
             </setting>
             <setting>
-                <name>CyberSource.MerchantReferenceCode</name>
+                <name>CyberSource.KeysDirectory</name>
                 <valueType>string</valueType>
-                <title>Merchant reference code</title>
-                <description>CyberSource merchant reference code</description>
+                <title>Transaction Security Keys Directory</title>
+                <description>Directory containing file {Merchant ID}.p12. This file should be generated in CyberSource Enterprise Business Center</description>
             </setting>
             <setting>
                 <name>CyberSource.ThankYouPageRelativeUrl</name>
                 <valueType>string</valueType>
-                <title>Thank you page relative url</title>
-                <description>CyberSource thank you page relative url - url on that user will be redirected, after getting success payment result</description>
+                <defaultValue>cart/thanks</defaultValue>
+                <title>Thank you page relative URL</title>
+                <description>URL to redirect after a successful payment</description>
             </setting>
             <setting>
                 <name>CyberSource.WorkMode</name>
@@ -53,7 +54,7 @@
                     <value>live</value>
                 </allowedValues>
                 <title>Work mode</title>
-                <description>Mode of CyberSource payment gateway (test or live, set live only when you tested all)</description>
+                <description>Mode of CyberSource payment gateway (test or live)</description>
             </setting>
             <setting>
                 <name>CyberSource.PaymentMethod</name>
@@ -64,7 +65,7 @@
                 </allowedValues>
                 <defaultValue>Sale</defaultValue>
                 <title>Payment action type</title>
-                <description>CyberSource payment method (Sale - authorization and capture in one, Authorization/Capture - operation separates in that 2 steps)</description>
+                <description>CyberSource payment method (Sale - authorization and capture in one, Authorization/Capture - operations separated in that 2 steps)</description>
             </setting>
         </group>
     </settings>

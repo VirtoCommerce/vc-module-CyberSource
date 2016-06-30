@@ -26,7 +26,7 @@ namespace Cyber.Source
             {
                 Name = "CyberSource payment gateway",
                 Description = "CyberSource payment gateway integration",
-                LogoUrl = "Modules/$(Cyber.Source)/Content/cybersource.jpg",
+                LogoUrl = "https://raw.githubusercontent.com/VirtoCommerce/vc-module-CyberSource/master/Cyber.Source/Content/cybersource.jpg",
                 Settings = settings,
                 IsActive = false
             };
