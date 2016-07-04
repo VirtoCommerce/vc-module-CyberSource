@@ -7,7 +7,6 @@ using Xunit;
 
 namespace CyberSource.Tests
 {
-    [Trait("Category", "CI")]
     public class NVPClientTests
     {
         private static string MerchantId = "virtocommerce_test",
@@ -15,6 +14,7 @@ namespace CyberSource.Tests
             ;
 
         [Fact]
+        [Trait("Category", "CI")]
         public void ProcessPayment_successfull()
         {
             //arrange
@@ -22,6 +22,22 @@ namespace CyberSource.Tests
 
             //act
             var reply = NVPClient.RunTransaction(TransactionConfiguration, request);
+
+
+            //assert
+            Assert.Equal("ACCEPT", reply["decision"]);
+            Assert.Equal("100", reply["reasonCode"]);
+        }
+
+        [Fact]
+        [Trait("Category", "CI")]
+        public void ProcessPayment_failing()
+        {
+            //arrange
+            var request = PrepareProcessPaymentRequest(false);
+
+            //act
+            var reply = NVPClient.RunTransaction(request);
 
 
             //assert
