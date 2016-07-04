@@ -16,7 +16,7 @@ namespace Cyber.Source.Managers
         private const string _cyberSourceKeysDirectoryStoreSetting = "CyberSource.KeysDirectory";
         private const string _cyberSourcePaymentMethodStoreSetting = "CyberSource.PaymentMethod";
         private const string _cyberSourceWorkModeStoreSetting = "CyberSource.WorkMode";
-        private const string _cyberSourceThankYouPageRelativeUrl = "CyberSource.ThankYouPageRelativeUrl";
+
         public CyberSourceMethod() : base("CyberSource") { }
 
         public override PaymentMethodGroupType PaymentMethodGroupType
@@ -56,14 +56,6 @@ namespace Cyber.Source.Managers
             get
             {
                 return GetSetting(_cyberSourceWorkModeStoreSetting);
-            }
-        }
-
-        public string ThankYouPageRelativeUrl
-        {
-            get
-            {
-                return GetSetting(_cyberSourceThankYouPageRelativeUrl);
             }
         }
 
@@ -141,7 +133,6 @@ namespace Cyber.Source.Managers
                         context.Payment.IsApproved = true;
                     }
                     retVal.IsSuccess = true;
-                    retVal.RedirectUrl = string.Format("{0}/{1}?id={2}", context.Store.Url, ThankYouPageRelativeUrl, context.Order.Id);
                 }
                 else
                 {
