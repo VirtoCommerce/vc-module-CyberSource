@@ -20,7 +20,7 @@ namespace Cyber.Source
 
         public override void PostInitialize()
         {
-            var settings = _container.Resolve<ISettingsManager>().GetModuleSettings("Cyber.Source");
+            var settings = _container.Resolve<ISettingsManager>().GetModuleSettings("CyberSource.SimpleOrder");
 
             Func<CyberSourceMethod> authorizeNetPaymentMethodFactory = () => new CyberSourceMethod
             {
