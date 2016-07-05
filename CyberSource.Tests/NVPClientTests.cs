@@ -14,7 +14,7 @@ namespace CyberSource.Tests
             ;
 
         [Fact]
-        [Trait("Category", "CI")]
+        // [Trait("Category", "CI")]
         public void ProcessPayment_successfull()
         {
             //arrange
@@ -30,7 +30,7 @@ namespace CyberSource.Tests
         }
 
         [Fact]
-        [Trait("Category", "CI")]
+        // [Trait("Category", "CI")]
         public void ProcessPayment_failing()
         {
             //arrange
