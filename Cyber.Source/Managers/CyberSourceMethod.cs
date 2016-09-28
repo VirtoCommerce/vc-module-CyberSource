@@ -83,13 +83,13 @@ namespace Cyber.Source.Managers
                 else
                 {
                     if (reasonCode == 101)
-                        throw new NullReferenceException(string.Format("result from CyberSource, not success, decision is {0}, reasonCode is {1}, full info of reason is {2}", decision, reasonCode, EnumerateValues(reply, "missingField")));
+                        retVal.ErrorMessage = string.Format("result from CyberSource, not success, decision is {0}, reasonCode is {1}, full info of reason is {2}", decision, reasonCode, EnumerateValues(reply, "missingField"));
                     if (reasonCode == 102)
-                        throw new NullReferenceException(string.Format("result from CyberSource, not success, decision is {0}, reasonCode is {1}, full info of reason is {2}", decision, reasonCode, EnumerateValues(reply, "invalidField")));
+                        retVal.ErrorMessage = string.Format("result from CyberSource, not success, decision is {0}, reasonCode is {1}, full info of reason is {2}", decision, reasonCode, EnumerateValues(reply, "invalidField"));
                     if (reasonCode == 204)
-                        throw new NullReferenceException(string.Format("result from CyberSource, not success, decision is {0}, reasonCode is {1}, full info of reason is not enough funds", decision, reasonCode));
+                        retVal.ErrorMessage = string.Format("result from CyberSource, not success, decision is {0}, reasonCode is {1}, full info of reason is not enough funds", decision, reasonCode);
 
-                    throw new NullReferenceException(string.Format("result from CyberSource, not success, decision is {0}, reasonCode is {1}", decision, reasonCode));
+                    retVal.ErrorMessage = string.Format("result from CyberSource, not success, decision is {0}, reasonCode is {1}", decision, reasonCode);
                 }
             }
             else
@@ -137,18 +137,18 @@ namespace Cyber.Source.Managers
                 else
                 {
                     if (reasonCode == 101)
-                        throw new NullReferenceException(string.Format("result from CyberSource, not success, decision is {0}, reasonCode is {1}, full info of reason is {2}", decision, reasonCode, EnumerateValues(reply, "missingField")));
+                        retVal.Error = string.Format("result from CyberSource, not success, decision is {0}, reasonCode is {1}, full info of reason is {2}", decision, reasonCode, EnumerateValues(reply, "missingField"));
                     if (reasonCode == 102)
-                        throw new NullReferenceException(string.Format("result from CyberSource, not success, decision is {0}, reasonCode is {1}, full info of reason is {2}", decision, reasonCode, EnumerateValues(reply, "invalidField")));
+                        retVal.Error = string.Format("result from CyberSource, not success, decision is {0}, reasonCode is {1}, full info of reason is {2}", decision, reasonCode, EnumerateValues(reply, "invalidField"));
                     if (reasonCode == 204)
-                        throw new NullReferenceException(string.Format("result from CyberSource, not success, decision is {0}, reasonCode is {1}, full info of reason is not enough funds", decision, reasonCode));
+                        retVal.Error = string.Format("result from CyberSource, not success, decision is {0}, reasonCode is {1}, full info of reason is not enough funds", decision, reasonCode);
 
-                    throw new NullReferenceException(string.Format("result from CyberSource, not success, decision is {0}, reasonCode is {1}", decision, reasonCode));
+                    retVal.Error = string.Format("result from CyberSource: NOT SUCCESS, decision is {0}, reasonCode is {1}.", decision, reasonCode);
                 }
             }
             else
             {
-                throw new NullReferenceException("no reply from CyberSource");
+                retVal.Error = "no reply from CyberSource";
             }
 
             return retVal;
@@ -193,12 +193,12 @@ namespace Cyber.Source.Managers
                 }
                 else
                 {
-                    throw new NullReferenceException(string.Format("result from CyberSource, not success, decision is {0}, reasonCode is {1}", decision, reasonCode));
+                    retVal.ErrorMessage = string.Format("result from CyberSource, not success, decision is {0}, reasonCode is {1}", decision, reasonCode);
                 }
             }
             else
             {
-                throw new NullReferenceException("no reply from CyberSource");
+                retVal.ErrorMessage = "no reply from CyberSource";
             }
 
             return retVal;

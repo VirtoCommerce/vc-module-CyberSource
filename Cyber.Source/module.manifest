@@ -11,11 +11,12 @@
     <description>APIs and UI for CyberSource Simple Order API payment gateway</description>
     <authors>
         <author>Virto Commerce</author>
+        <author>Egidijus Mažeika</author>
     </authors>
     <owners>
         <owner>Virto Commerce</owner>
     </owners>
-    <projectUrl>http://virtocommerce.com/</projectUrl>
+    <projectUrl>https://github.com/VirtoCommerce/vc-module-CyberSource</projectUrl>
     <iconUrl>https://raw.githubusercontent.com/VirtoCommerce/vc-module-CyberSource/master/Cyber.Source/Content/cybersource.jpg</iconUrl>
     <releaseNotes>First version.</releaseNotes>
     <copyright>Copyright © 2011-2016 Virto Commerce. All rights reserved</copyright>
@@ -36,7 +37,7 @@
                 <name>CyberSource.KeysDirectory</name>
                 <valueType>string</valueType>
                 <title>Transaction Security Keys Directory</title>
-                <description>Directory containing file {Merchant ID}.p12. This file should be generated in CyberSource Enterprise Business Center</description>
+                <description>Full path to directory containing file {Merchant ID}.p12. This file should be generated in CyberSource Enterprise Business Center</description>
             </setting>
             <setting>
                 <name>CyberSource.WorkMode</name>
