@@ -1,5 +1,5 @@
 <?xml version="1.0" encoding="utf-8" ?>
-<module>
+<module> 
     <id>CyberSource.SimpleOrder</id>
     <version>2.12.0</version>
     <platformVersion>2.12.0</platformVersion>
