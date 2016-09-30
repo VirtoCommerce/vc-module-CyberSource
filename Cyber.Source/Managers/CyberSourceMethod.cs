@@ -51,11 +51,11 @@ namespace Cyber.Source.Managers
             }
         }
 
-        public string WorkMode
+        public bool IsProductionMode
         {
             get
             {
-                return GetSetting(_cyberSourceWorkModeStoreSetting);
+                return GetSetting(_cyberSourceWorkModeStoreSetting).ToLower().Equals("live");
             }
         }
 
@@ -124,14 +124,14 @@ namespace Cyber.Source.Managers
                     if (IsSeparatePaymentAction())
                     {
                         retVal.NewPaymentStatus = context.Payment.PaymentStatus = PaymentStatus.Authorized;
-                        context.Payment.AuthorizedDate = DateTime.UtcNow;
                     }
                     else
                     {
                         retVal.NewPaymentStatus = context.Payment.PaymentStatus = PaymentStatus.Paid;
-                        context.Payment.AuthorizedDate = context.Payment.CapturedDate = DateTime.UtcNow;
+                        context.Payment.CapturedDate = DateTime.UtcNow;
                         context.Payment.IsApproved = true;
                     }
+                    context.Payment.AuthorizedDate = DateTime.UtcNow;
                     retVal.IsSuccess = true;
                 }
                 else
@@ -214,7 +214,7 @@ namespace Cyber.Source.Managers
                     {
                         MerchantID = MerchantId,
                         KeysDirectory = GetSetting(_cyberSourceKeysDirectoryStoreSetting),
-                        SendToProduction = !IsTest()
+                        SendToProduction = IsProductionMode
                     };
                 }
                 catch (ApplicationException ae)
@@ -245,11 +245,6 @@ namespace Cyber.Source.Managers
                 request.Add("ccAuthService_run", "true");
                 request.Add("ccCaptureService_run", "true");
             }
-
-            //if (IsTest())
-            //    request.Add("sendToProduction", "false");
-            //else
-            //    request.Add("sendToProduction", "true");
 
             // Set billing address of payment as address for request
             var address = context.Payment.BillingAddress;
@@ -284,12 +279,6 @@ namespace Cyber.Source.Managers
         private Hashtable PrepareCaptureProcessPaymentRequest(CaptureProcessPaymentEvaluationContext context)
         {
             Hashtable request = new Hashtable();
-
-            //if (IsTest())
-            //    request.Add("sendToProduction", "false");
-            //else
-            //    request.Add("sendToProduction", "true");
-
             request.Add("ccCaptureService_authRequestID", context.Payment.OuterId);
             request.Add("merchantID", MerchantId);
             request.Add("merchantReferenceCode", context.Payment.Number);
@@ -332,11 +321,6 @@ namespace Cyber.Source.Managers
         private bool IsSeparatePaymentAction()
         {
             return PaymentMethod.Equals("Authorization/Capture");
-        }
-
-        private bool IsTest()
-        {
-            return !WorkMode.ToLower().Equals("live");
         }
 
         private static string EnumerateValues(Hashtable reply, string fieldName)
