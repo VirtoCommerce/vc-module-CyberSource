@@ -65,7 +65,7 @@ namespace Cyber.Source.Managers
 
             var request = PrepareCaptureProcessPaymentRequest(context);
 
-            var reply = NVPClient.RunTransaction(TransactionConfiguration, request);
+            var reply = NVPClient.RunTransaction(GetTransactionConfiguration(), request);
             if (reply != null && reply.ContainsKey("decision") && reply.ContainsKey("reasonCode"))
             {
                 var decision = (string)reply["decision"];
@@ -111,7 +111,7 @@ namespace Cyber.Source.Managers
 
             var request = PrepareProcessPaymentRequest(context);
 
-            var reply = NVPClient.RunTransaction(TransactionConfiguration, request);
+            var reply = NVPClient.RunTransaction(GetTransactionConfiguration(), request);
             if (reply != null && reply.ContainsKey("decision") && reply.ContainsKey("reasonCode"))
             {
                 var decision = (string)reply["decision"];
@@ -178,7 +178,7 @@ namespace Cyber.Source.Managers
             request.Add("item_0_unitPrice", context.Payment.Sum.ToString());
             //request.Add("item_0_quantity", "1");
 
-            var reply = NVPClient.RunTransaction(TransactionConfiguration, request);
+            var reply = NVPClient.RunTransaction(GetTransactionConfiguration(), request);
             if (reply != null && reply.ContainsKey("decision") && reply.ContainsKey("reasonCode"))
             {
                 var decision = (string)reply["decision"];
@@ -204,28 +204,7 @@ namespace Cyber.Source.Managers
             return retVal;
         }
 
-        public Configuration TransactionConfiguration
-        {
-            get
-            {
-                try
-                {
-                    return new Configuration()
-                    {
-                        MerchantID = MerchantId,
-                        KeysDirectory = GetSetting(_cyberSourceKeysDirectoryStoreSetting),
-                        SendToProduction = !IsTest()
-                    };
-                }
-                catch (ApplicationException ae)
-                {
-                    return new Configuration()
-                    {
-                        MerchantID = ae.Message
-                    };
-                }
-            }
-        }
+        
 
         private Hashtable PrepareProcessPaymentRequest(ProcessPaymentEvaluationContext context)
         {
@@ -337,6 +316,28 @@ namespace Cyber.Source.Managers
         private bool IsTest()
         {
             return !WorkMode.ToLower().Equals("live");
+        }
+
+        private Configuration GetTransactionConfiguration()
+        {
+
+            try
+            {
+                return new Configuration()
+                {
+                    MerchantID = MerchantId,
+                    KeysDirectory = GetSetting(_cyberSourceKeysDirectoryStoreSetting),
+                    SendToProduction = !IsTest()
+                };
+            }
+            catch (ApplicationException ae)
+            {
+                return new Configuration()
+                {
+                    MerchantID = ae.Message
+                };
+            }
+
         }
 
         private static string EnumerateValues(Hashtable reply, string fieldName)
