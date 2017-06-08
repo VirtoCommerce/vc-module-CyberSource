@@ -16,7 +16,7 @@
     <owners>
         <owner>Virto Commerce</owner>
     </owners>
-    <projectUrl>https://github.com/VirtoCommerce/vc-module-CyberSource</projectUrl>
+    <projectUrl>https://virtocommerce.com/apps/extensions/cybersource-simple-order-payment-gateway</projectUrl>
     <iconUrl>https://raw.githubusercontent.com/VirtoCommerce/vc-module-CyberSource/master/Cyber.Source/Content/cybersource.jpg</iconUrl>
     <releaseNotes>First version.</releaseNotes>
     <copyright>Copyright © 2011-2016 Virto Commerce. All rights reserved</copyright>
